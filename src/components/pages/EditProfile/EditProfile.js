@@ -41,7 +41,7 @@ export default function EditProfile() {
       <Link to={`${process.env.PUBLIC_URL}/dashboard/`}></Link>
     }
     else{
-      alert("MisMatch Password!");
+      alert("MisMatch Password!!!");
     }
   }
 
