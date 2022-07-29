@@ -17,7 +17,7 @@ export default function Login() {
  if(result.data){
  localStorage.setItem("token",result.data.token)
 
-  alert(JSON.stringify(result.data))
+  alert(JSON.stringify(result.data.status))
   // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
 
   window.location.replace(`${process.env.PUBLIC_URL}/dashboard`)
