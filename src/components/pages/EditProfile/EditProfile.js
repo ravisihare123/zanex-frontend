@@ -21,27 +21,32 @@ export default function EditProfile() {
   const [confrimPassword, setConfrimPassword] = useState('')
   const navigate = useNavigate();
 
-  const handleSubmit = ()=>{
+  const handleSubmit = async ()=>{
     var token  = localStorage.getItem("token")
     let body = {
       changepassword:changePassword,
       newpassword:newPassword,
       confrimpassword:confrimPassword
     }
-    var result = axios.post('http://localhost:5000/changepassword/password',
+    var result = await axios.post('http://localhost:5000/changepassword/password',
     body,{
       headers:{
         "content-type": "application/json",
         Authorization:"bearer " + token}
     })
-    if(result.data){
+
+    // alert(JSON.stringify(result.data))
+    if(result.data.status){
       
-      alert(JSON.stringify(result.data));
-      // navigate('http://localhost:3000/zanex/preview/dashboard')
-      <Link to={`${process.env.PUBLIC_URL}/dashboard/`}></Link>
+      alert(JSON.stringify(result.data.message));
+      navigate(`${process.env.PUBLIC_URL}/dashboard`)
+      // window.location.replace(`${process.env.PUBLIC_URL}/dashboard`)
+
     }
     else{
-      alert("MisMatch Password!!!");
+      alert(JSON.stringify(result.data.message));
+      localStorage.clear();
+
     }
   }
 
