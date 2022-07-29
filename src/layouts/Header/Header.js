@@ -1,8 +1,11 @@
-import React from "react";
+import { setRef } from "@fullcalendar/core";
+import React, { useState } from "react";
 import { Dropdown, Navbar, Container,Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
+  const navigate = useNavigate()
   //full screen
   function Fullscreen() {
     if (
@@ -50,6 +53,12 @@ export function Header() {
     document.querySelector(".demo_changer").classList.toggle("active");
     document.querySelector(".demo_changer").style.right = "0px";
   };
+
+  const handleSignOut = ()=>{
+    alert("logout with clear token");
+    localStorage.clear()
+    navigate(`${process.env.PUBLIC_URL}/custompages/login`)
+  }
   return (
     <Navbar expand="md" className="app-header header sticky">
       <Container fluid className="main-container">
@@ -421,7 +430,7 @@ export function Header() {
             </div>
             <div
               className="demo-icon nav-link icon border-0"
-              onClick={() => swichermainright()}
+              onClick={() => handleSignOut()}
             >
               <i className="fe fe-settings fa-spin"></i>
             </div>

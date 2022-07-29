@@ -45,8 +45,8 @@ export default function EditProfile() {
     }
     else{
       alert(JSON.stringify(result.data.message));
-      localStorage.clear();
-      window.location.reload()
+      // localStorage.clear();
+      // window.location.reload()
 
     }
   }
