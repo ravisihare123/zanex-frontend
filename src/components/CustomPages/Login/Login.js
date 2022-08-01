@@ -3,41 +3,45 @@ import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata"
+import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata";
 export default function Login() {
-  const [email, setEmail]=useState("")
-  const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit =async ()=>{
-  var result =await axios.post('http://localhost:5000/login/adminlogin',{
-    email:email,
-    password:password
-  })
- if(result.data){
- localStorage.setItem("token",result.data.token)
+  const handleSubmit = async () => {
+    var result = await axios.post("http://localhost:5000/login/admindisplay", {
+      email: email,
+      password: password,
+    });
+    if (result.data) {
+      localStorage.setItem("token", result.data.token);
 
-  alert(JSON.stringify(result.data.status))
-  // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
+      alert(JSON.stringify(result.data.status));
+      // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
 
-  window.location.replace(`${process.env.PUBLIC_URL}/dashboard`)
-  // navigate(`${process.env.PUBLIC_URL}/dashboard`, {replace: true})
-  navigate(`${process.env.PUBLIC_URL}/dashboard`,{replace:true})
-
- }
- else{
-  alert("invalid email or password!")
- }
-  }
+      window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
+      // navigate(`${process.env.PUBLIC_URL}/dashboard`, {replace: true})
+      navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
+    } else {
+      alert("invalid email or password!");
+    }
+  };
   return (
     <div className="login-img">
       <div className="page">
         <div className="dropdown float-end custom-layout">
-                <div className="demo-icon nav-link icon mt-4 bg-primary" onClick={()=>custompagesswitcherdata.Swichermainright()}>
-                    <i className="fe fe-settings fa-spin text_primary"></i>
-                </div>
-            </div>
-        <div className="" onClick={()=>custompagesswitcherdata.Swichermainrightremove()}>
+          <div
+            className="demo-icon nav-link icon mt-4 bg-primary"
+            onClick={() => custompagesswitcherdata.Swichermainright()}
+          >
+            <i className="fe fe-settings fa-spin text_primary"></i>
+          </div>
+        </div>
+        <div
+          className=""
+          onClick={() => custompagesswitcherdata.Swichermainrightremove()}
+        >
           <div className="col col-login mx-auto">
             <div className="text-center">
               <img
@@ -56,9 +60,8 @@ export default function Login() {
                     <input
                       className="input100"
                       type="text"
-                      
                       placeholder="Email"
-                      onChange={(e)=>setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     <span className="focus-input100"></span>
                     <span className="symbol-input100">
@@ -69,9 +72,8 @@ export default function Login() {
                     <input
                       className="input100"
                       type="password"
-                      
                       placeholder="Password"
-                      onChange={(e)=>setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <span className="focus-input100"></span>
                     <span className="symbol-input100">
@@ -88,7 +90,10 @@ export default function Login() {
                       </Link>
                     </p>
                   </div>
-                  <div className="container-login100-form-btn" onClick={()=>handleSubmit()}>
+                  <div
+                    className="container-login100-form-btn"
+                    onClick={() => handleSubmit()}
+                  >
                     <button className="btn btn-primary btn-block">login</button>
                   </div>
                   <div className="text-center pt-3">
