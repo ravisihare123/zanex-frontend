@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState,createContext } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata";
+import { GetContext } from "../../context/Context";
+
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const { email, setEmail, password, setPassword } = GetContext();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+
     var result = await axios.post("http://localhost:5000/login/admindisplay", {
+      // email: email,
+      // password: password,
       email: email,
       password: password,
     });
@@ -25,6 +31,8 @@ export default function Login() {
       navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
     } else {
       alert("invalid email or password!");
+      // localStorage.clear();
+      // window.location.reload();
     }
   };
   return (

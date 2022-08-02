@@ -7,6 +7,7 @@ import RightSidebar from "../layouts/RightSidebar/RightSidebar";
 import * as Switcherdata from "../data/Switcher/Switcherdata";
 import { Outlet } from "react-router-dom";
 import TabToTop from "../layouts/TabToTop/TabToTop";
+import Context from "./context/Context";
 
 export default function App() {
   return (
@@ -26,7 +27,7 @@ export default function App() {
                     Switcherdata.Horizontalmenudefultclose();
                   }}
                 >
-                  <Outlet />
+                    <Outlet />
                 </div>
               </div>
             </div>

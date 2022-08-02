@@ -14,11 +14,12 @@ import {
   Breadcrumb,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-export default function EditProfile() {
+// import { GetContext } from "../../context/Context";
 
-  const [changePassword, setChangePassword] = useState('')
-  const [newPassword, setNewPassword] = useState('') 
-  const [confrimPassword, setConfrimPassword] = useState('')
+export default function EditProfile() {
+ const [changePassword, setChangePassword] = useState("");
+ const [newPassword, setNewPassword] = useState("");
+ const [confrimPassword, setConfrimPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async ()=>{
