@@ -3,7 +3,7 @@ import Header from "../layouts/Header/Header";
 import Sidebar from "../layouts/SideBar/SideBar";
 import Footer from "../layouts/Footer/Footer";
 import Switcher from "../layouts/Switcher/Switcher";
-import RightSidebar from "../layouts/RightSidebar/RightSidebar";
+
 import * as Switcherdata from "../data/Switcher/Switcherdata";
 import { Outlet } from "react-router-dom";
 import TabToTop from "../layouts/TabToTop/TabToTop";
@@ -16,7 +16,10 @@ export default function App() {
         <TabToTop />
         <div className="page">
           <div className="page-main">
+            <Context>
+
             <Header />
+            </Context>
             <Sidebar />
             <div className="main-content app-content ">
               <div className="side-app">
@@ -32,7 +35,7 @@ export default function App() {
               </div>
             </div>
           </div>
-          <RightSidebar />
+         
           <Switcher />
           <Footer />
         </div>

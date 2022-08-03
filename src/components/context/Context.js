@@ -7,23 +7,29 @@ export function GetContext() {
 }
 
 export default function Context({ children }) {
-  const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+ 
     const [token, setToken] = useState(localStorage.getItem("token"));
     const [userInfo, setUserInfo] = useState({
-        email: null,
-        password:null
+      name: null,
+      email:null
     })
 
     useEffect(() => {
-        function fetchData() {
-            var token = localStorage.getItem("token");
+        async function fetchData() {
+            var token = await localStorage.getItem("token");
             if (token) {
-                const admin = jwtDecode(token);
-                setUserInfo({
-                    email: admin?.email,
-                    password: admin?.password
-                });
+              const admin = jwtDecode(token);
+              // alert(JSON.stringify(admin))
+              // var test = {
+              //   name: admin?.name,
+              //   email:admin?.email
+              // };
+              setUserInfo({
+                name: admin?.name,
+                email: admin?.email,
+              });
+              // setUserInfo(test)
+              // alert(JSON.stringify(userInfo.name))
             }
       }
         fetchData();
@@ -32,24 +38,20 @@ export default function Context({ children }) {
     
  
 
-    const values = useMemo(
-      () => ({
-        email,
-        setEmail,
-        password,
-        setPassword,
-        token,
-        setToken,
-        userInfo,
-        setUserInfo
-      }),
-      [email, password,token, userInfo]
-    );
+    // const values = useMemo(
+    //   () => ({
+        
+    //     token,
+    //     setToken,
+    //     userInfo,
+    //     setUserInfo,
+    //    }),
+    //   [token,userInfo]
+  // );
+  alert(JSON.stringify({"conext":userInfo.name}))
     
   return (
-    <MyContext.Provider
-      value={{values}}
-    >
+    <MyContext.Provider value={{ token, setToken, userInfo, setUserInfo }}>
       {children}
     </MyContext.Provider>
   );

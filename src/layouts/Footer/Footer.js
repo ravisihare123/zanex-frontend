@@ -7,7 +7,7 @@ return(
 			<div className="container">
 				<Row className="align-items-center flex-row-reverse">
 					<Col className="text-center" sm={12} md={12} lg={12}>
-						 Copyright © 2022 <Link to="#">Zenax</Link>. Designed with <span className="fa fa-heart text-danger"></span> by <Link to="#"> Spruko </Link> All rights reserved
+						 Copyright © 2022 <Link to="#">Zenax</Link>. Designed with <span className="fa fa-heart text-danger"></span> by <Link to="#"> koffeekodes IT solutions </Link> All rights reserved
 					</Col>
 				</Row>
 			</div>

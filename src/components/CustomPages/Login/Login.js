@@ -4,12 +4,12 @@ import { Card } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata";
-import { GetContext } from "../../context/Context";
-
+import jwtDecode from "jwt-decode";
 export default function Login() {
   // const { email, setEmail, password, setPassword } = GetContext();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -22,13 +22,13 @@ export default function Login() {
     });
     if (result.data) {
       localStorage.setItem("token", result.data.token);
-
+      localStorage.setItem('email',jwtDecode(result.data.token).login_email)
       alert(JSON.stringify(result.data.status));
       // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
 
       window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
       // navigate(`${process.env.PUBLIC_URL}/dashboard`, {replace: true})
-      navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
+      navigate(`${process.env.PUBLIC_URL}/dashboard`,{replace:true});
     } else {
       alert("invalid email or password!");
       // localStorage.clear();
