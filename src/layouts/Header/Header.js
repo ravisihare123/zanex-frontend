@@ -9,9 +9,9 @@ import { GetContext } from "../../components/context/Context";
 export function Header() {
   const navigate = useNavigate()
   const { userInfo } = GetContext();
-  alert("header",JSON.stringify(userInfo?.name))
+  // alert("header",JSON.stringify(userInfo?.name))
 
-  console.log(JSON.stringify(userInfo?.name));
+  // console.log(JSON.stringify(userInfo?.name));
   //full screen
   function Fullscreen() {
     if (

@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata";
-import jwtDecode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 export default function Login() {
   // const { email, setEmail, password, setPassword } = GetContext();
   const [email, setEmail] = useState('')
@@ -22,7 +22,11 @@ export default function Login() {
     });
     if (result.data) {
       localStorage.setItem("token", result.data.token);
-      localStorage.setItem('email',jwtDecode(result.data.token).login_email)
+      localStorage.setItem(
+        "email",
+        jwt_decode(result.data.token).email,
+        (result.data.token).name
+      );
       alert(JSON.stringify(result.data.status));
       // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
 
@@ -98,11 +102,14 @@ export default function Login() {
                       </Link>
                     </p>
                   </div>
-                  <div
-                    className="container-login100-form-btn"
-                    onClick={() => handleSubmit()}
-                  >
-                    <button className="btn btn-primary btn-block">login</button>
+                  <div className="container-login100-form-btn">
+                    <button
+                      type="button"
+                      onClick={() => handleSubmit()}
+                       className="btn btn-primary btn-block"
+                    >
+                      login
+                    </button>
                   </div>
                   <div className="text-center pt-3">
                     <p className="text-dark mb-0">

@@ -9,6 +9,19 @@ export const MENUITEMS = [
         active: true,
         title: "Dashboard",
       },
+      {
+        title: "user",
+        icon: "database",
+        type: "sub",
+        active: false,
+        children: [
+          {
+            path: `${process.env.PUBLIC_URL}/userinfo`,
+            type: "link",
+            title: "user info",
+          },
+        ],
+      },
     ],
   },
   // {

@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 import { GetContext } from "../context/Context";
 export default function Dashboard() {
   const { userInfo } = GetContext()
-  alert(JSON.stringify({ "dashboard": userInfo?.email }));
+  
   return (
     <div>
       <div className="page-header ">
         <div>
-          <h1 className="page-title">Dashboard 01</h1>
+          <h1 className="page-title">Dashboard </h1>
           <Breadcrumb className="breadcrumb">
             <Breadcrumb.Item className="breadcrumb-item" href="#">
               Home
@@ -21,7 +21,8 @@ export default function Dashboard() {
               className="breadcrumb-item active breadcrumds"
               aria-current="page"
             >
-              Dashboard 01 {userInfo?.email}
+              Dashboard 
+              {/* {userInfo?.email} */}
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>

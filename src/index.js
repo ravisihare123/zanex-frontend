@@ -4,6 +4,8 @@ import "./index.scss";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import OutletCheck from "./outletCheck/OutletCheck";
 import Context from "./components/context/Context";
+// import UserInfo from "./components/pages/User/UserInfo";
+
 
 //App
 const App = React.lazy(() => import("./components/app"));
@@ -12,6 +14,8 @@ const Custompages = React.lazy(() => import("./components/custompages"));
 //Dashboard
 const Dashboard = React.lazy(()=> import("./components/Dashboard/Dashboard"));
 
+//user
+const UserInfo = React.lazy(() => import("./components/Pages/user/UserInfo"));
 
 //custom Pages
 const Login = React.lazy(()=>import("./components/CustomPages/Login/Login"));
@@ -37,29 +41,30 @@ const Root = () => {
 
   return (
     <Fragment>
-     
-        <BrowserRouter>
+      <BrowserRouter>
         <React.Suspense fallback={Loaderimg()}>
-           <Context>
+          <Context>
             <Routes>
               <Route
                 path={`${process.env.PUBLIC_URL}/custompages/login`}
                 element={<Login />}
               />
-             
+              <Route path={'/'} element={<OutletCheck/>}>
                 <Route path={`${process.env.PUBLIC_URL}/`} element={<App />}>
                   <Route index element={<Dashboard />} />
                   <Route
                     path={`${process.env.PUBLIC_URL}/dashboard`}
                     element={<Dashboard />}
                   />
+                  <Route path={`${process.env.PUBLIC_URL}/userinfo`}
+                    element={<UserInfo />}
+                  />
                 </Route>
-               
+
                 <Route
                   path={`${process.env.PUBLIC_URL}/`}
                   element={<Custompages />}
                 >
-
                   <Route
                     path={`${process.env.PUBLIC_URL}/custompages/register`}
                     element={<Register />}
@@ -72,12 +77,12 @@ const Root = () => {
                     path={`${process.env.PUBLIC_URL}/custompages/lockScreen`}
                     element={<LockScreen />}
                   />
-                  
                 </Route>
-            </Routes>'
-            </Context>
-          </React.Suspense>
-        </BrowserRouter>
+              </Route>
+            </Routes>
+          </Context>
+        </React.Suspense>
+      </BrowserRouter>
     </Fragment>
   );
 };
