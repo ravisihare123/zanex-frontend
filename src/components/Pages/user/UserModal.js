@@ -2,6 +2,7 @@ import { NotificationsActive } from '@mui/icons-material';
 import React, {useState } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
 import { post } from "../../../helper/api" 
+import axios from 'axios';
 
 
 export default function UseModal({ show, setShow }) {
@@ -9,8 +10,11 @@ export default function UseModal({ show, setShow }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const[image, setImage] = useState("")
+  const [image, setImage] = useState({ bytes: '', filename:""})
 
+  const handleImage = (event) => {
+    setImage({ bytes: event.target.files[0], filename: URL.createObjectURL(event.target.files[0]) })
+  }
   const handleClose = () => {
     // lastName (""),
     // firstName ("")
@@ -20,14 +24,23 @@ export default function UseModal({ show, setShow }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var params = {
-      firstname: firstName,
-      lastname: lastName,
-      phonenumber: phoneNumber,
-      img: image
+    var formData = new FormData()
+    formData.append("firstname", firstName)
+    formData.append("lastname", lastName)
+    formData.append("phonenumber", phoneNumber)
+    formData.append("img",image.bytes)
+    // var params = {
+    //   firstname: firstName,
+    //   lastname: lastName,
+    //   phonenumber: phoneNumber,
+    //   img: image
       
-    }
-    const result = await post("user/insertUser", params)
+    // }
+    alert(JSON.stringify(image));
+    
+    const result = await axios.post("http://localhost:5000/user/insertUser", formData, {
+      Headers:{"content-type":"multipart/formdata"}
+    });
     if (result.status) {
       alert("success")
       // Notification.swatSuccess();
@@ -86,7 +99,7 @@ export default function UseModal({ show, setShow }) {
             </b>
             <Form.Control
               type="file"
-              onChange={(e)=>setImage(e.target.value)}
+              onChange={(event)=>handleImage(event)}
               required
             ></Form.Control>
           </Form.Group>

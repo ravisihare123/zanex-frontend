@@ -1,84 +1,105 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../layouts/Header/Header";
 import { Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import UserModal from "./UserModal";
 import { Row, Col, Card,OverlayTrigger,Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import { post } from "../../../helper/api";
 
 
 export default function UserInfo() {
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState([])
+  const [data, setData] = useState([])
+  const [totalRows, setTotalRows] = useState(0)
+  const [perPage, setPerPage] = useState(5)
+  const [page, setPage] = useState(1)
 
-    //  const deleteTooltip = (props) => (
-    //    <Tooltip id="button-tooltip" {...props}>
-    //      Delete
-    //    </Tooltip>
-    //  );
-    //  const editTooltip = (props) => (
-    //    <Tooltip id="button-tooltip" {...props}>
-    //      Edit
-    //    </Tooltip>
-    //  );
+
+  const fetchUser = async () => {
+    var params = {
+      perpage: perPage,
+      page: page
+    }
+    var list = await post("user/displayUser",params)
+    setData(list.data)
+    setTotalRows(list.total)
+  
+  }
+
+useEffect(() => {
+ fetchUser()
+}, [perPage, page])
+
+
+     const deleteTooltip = (props) => (
+       <Tooltip id="button-tooltip" {...props}>
+         Delete
+       </Tooltip>
+     );
+     const editTooltip = (props) => (
+       <Tooltip id="button-tooltip" {...props}>
+         Edit
+       </Tooltip>
+     );
 
     
 
-//   const columns = [
-//     {
-//       name: "ID",
-//       selector: (row) => [row.user_id],
-//       sortable: false,
-//     },
-//     {
-//       name: "First Name",
-//       selector: (row) => [row.first_name],
-//       sortable: false,
-//     },
-//     {
-//       name: "Last Name",
-//       selector: (row) => [row.last_name],
-//       sortable: false,
-//     },
-//     {
-//       name: "Phone Number",
-//       selector: (row) => [row.Phone_number],
-//       sortable: false,
-//     },
-//     {
-//       name: "Imge",
-//       selector: (row) => [row.user_image],
-//       sortable: false,
-//     },
-//     {
-//       name: "Action",
-//       cell: (row) => (
-//         <>
-//           <OverlayTrigger
-//             placement="bottom"
-//             delay={{ show: 250, hide: 400 }}
-//             overlay={editTooltip}
-//           >
-//             <i
-//               className="fe fe-edit fa-2x"
-//             //   onClick={() => handleUpdateShow(row)}
-//             ></i>
-//             {/* </Link> */}
-//           </OverlayTrigger>
-//           <OverlayTrigger
-//             placement="bottom"
-//             delay={{ show: 250, hide: 400 }}
-//             overlay={deleteTooltip}
-//           >
-//             <i
-//               className="mx-4 fe fe-trash-2 fa-2x text-red"
-//             //   onClick={() => handleDelete(row)}
-//             ></i>
-//           </OverlayTrigger>
-//         </>
-//       ),
-//     },
-//   ];
+  const columns = [
+    {
+      name: "ID",
+      selector: (row) => [row.userid],
+      sortable: false,
+    },
+    {
+      name: "First Name",
+      selector: (row) => [row.first_name],
+      sortable: false,
+    },
+    {
+      name: "Last Name",
+      selector: (row) => [row.last_name],
+      sortable: false,
+    },
+    {
+      name: "Phone Number",
+      selector: (row) => [row.phone_number],
+      sortable: false,
+    },
+    {
+      name: "Imge",
+      selector: (row) => <img src={row.user_image} />,
+      sortable: false,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <>
+          <OverlayTrigger
+            placement="bottom"
+            delay={{ show: 250, hide: 400 }}
+            overlay={editTooltip}
+          >
+            <i
+              className="fe fe-edit fa-2x"
+            //   onClick={() => handleUpdateShow(row)}
+            ></i>
+            {/* </Link> */}
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="bottom"
+            delay={{ show: 250, hide: 400 }}
+            overlay={deleteTooltip}
+          >
+            <i
+              className="mx-4 fe fe-trash-2 fa-2x text-red"
+            //   onClick={() => handleDelete(row)}
+            ></i>
+          </OverlayTrigger>
+        </>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -114,7 +135,7 @@ export default function UserInfo() {
           <UserModal show={showModal} setShow={setShowModal} />
         </div>
       </div>
-      {/* <Row className=" row-sm">
+      <Row className=" row-sm">
         <Col lg={12}>
           <Card>
             <Card.Body>
@@ -145,16 +166,16 @@ export default function UserInfo() {
                     highlightOnHover
                     paginationServer
                     // progressPending={loading}
-                    // paginationTotalRows={totalRows}
-                    // onChangeRowsPerPage={(perPage) => setPerPage(perPage)}
-                    // onChangePage={(page) => setPage(page)}
+                    paginationTotalRows={totalRows}
+                    onChangeRowsPerPage={(perPage) => setPerPage(perPage)}
+                    onChangePage={(page) => setPage(page)}
                   />
                 </div>
               </div>
             </Card.Body>
           </Card>
         </Col>
-      </Row> */}
+      </Row>
     </div>
   );
 }
