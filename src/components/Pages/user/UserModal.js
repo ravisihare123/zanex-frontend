@@ -1,30 +1,51 @@
 import { NotificationsActive } from '@mui/icons-material';
-import React, {useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
 import { post } from "../../../helper/api" 
 import axios from 'axios';
+import context from 'react-bootstrap/esm/AccordionContext';
 
 
-export default function UseModal({ show, setShow }) {
+export default function UseModal({ show, setShow ,state, setState ,fetchUser }) {
 
+  // const { userInfo } = context();{}
+  const [Id, setId] = useState("")
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [image, setImage] = useState({ bytes: '', filename:""})
 
+  // alert(Id)
   const handleImage = (event) => {
     setImage({ bytes: event.target.files[0], filename: URL.createObjectURL(event.target.files[0]) })
   }
+
+  useEffect(() => {
+    if (state.userid) {
+      alert(state.userid)
+      setId(state.userid)
+      setFirstName(state.firstName)
+      setLastName(state.lastName)
+      setPhoneNumber(state.phoneNumber)
+      setImage(state.image)
+      setShow(false)
+  }
+  }, [state])
+  alert(JSON.stringify("id",Id))
+
   const handleClose = () => {
     // lastName (""),
     // firstName ("")
     // phoneNumber(""),
     // image ("")
-      setShow(false);
+    setShow(false)
+    setState({})
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     var formData = new FormData()
+    // formData.append("adminemail",userInfo.email)
+    formData.append("userid",Id )
     formData.append("firstname", firstName)
     formData.append("lastname", lastName)
     formData.append("phonenumber", phoneNumber)
@@ -42,11 +63,20 @@ export default function UseModal({ show, setShow }) {
       Headers:{"content-type":"multipart/formdata"}
     });
     if (result.status) {
-      alert("success")
-      // Notification.swatSuccess();
+      // alert("success")
+      Notification.swatSuccess(result.msg)
+      setShow(false)
+      fetchUser()
+      setId("")
+      setFirstName("")
+      setLastName("")
+      setPhoneNumber("")
+      setImage("")
     }
     else {
-      alert("data not insert!!")
+      // alert("data not insert!!")
+      alert(result.msg)
+
     }
     setShow(false)
   }
@@ -64,7 +94,7 @@ export default function UseModal({ show, setShow }) {
             <Form.Control
               placeholder="Enter First Name"
               type="text"
-              //   value={ageGroup}
+                value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               required
             />
@@ -113,8 +143,8 @@ export default function UseModal({ show, setShow }) {
           </Button>
 
           <Button variant="primary" type='submit' >
-            {/* {true === "" ? "Inserted" : "Updated"} */}
-            Inserted
+            {Id === "" ? "Inserted" : "Updated"}
+            {/* Inserted */}
           </Button>
         </Modal.Footer>
       </Form>

@@ -5,7 +5,10 @@ import { Link } from "react-router-dom";
 import UserModal from "./UserModal";
 import { Row, Col, Card,OverlayTrigger,Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import { post } from "../../../helper/api";
+import { post, API_URL } from "../../../helper/api";
+import * as Notification from "../../../components/Notifications/index"
+import { swatPopup } from "../../../components/Notifications/index";
+import { RoofingTwoTone } from "@mui/icons-material";
 
 
 export default function UserInfo() {
@@ -14,6 +17,7 @@ export default function UserInfo() {
   const [totalRows, setTotalRows] = useState(0)
   const [perPage, setPerPage] = useState(5)
   const [page, setPage] = useState(1)
+  const [state, setState] = useState({})
 
 
   const fetchUser = async () => {
@@ -41,8 +45,51 @@ useEffect(() => {
        <Tooltip id="button-tooltip" {...props}>
          Edit
        </Tooltip>
-     );
+  );
+  
+  const handleDelete = (row) => {
 
+    Notification.swatPopup().then(async (result) => {
+      if (result.isConfirmed) {
+          var res = await post("user/delete",{userid: row.userid})
+      }
+      if (res.status) {
+        Notification.swatSuccess(res.msg);
+       
+        fetchUser()
+      }
+      else if (result.isDenied) {
+        Notification.swatCancel();
+        
+      }
+      })
+
+  //   var result = post("user/delete", { userid: row.userid })
+  //   if (result) {
+  //     alert("deleted")
+  //   }
+  //   else {
+  //     alert("not deleted")
+  //   }
+    
+  }
+
+
+  const handleUpdate = (row) => {
+
+    // Notification.swatPopup().then(async (result) => {
+    //   if (result.isConfirmed) {
+    //     var res = await post("user/delete",{userid:row.userid})
+    //   }
+    //   if (res.status) {
+    //     Notification.swatSuccess(res.msg)
+    //   }
+    //   else if (res.isDenied) {
+    //     Notification.swatCancel()
+    //   }
+    // })
+    setState({...row})
+  }
     
 
   const columns = [
@@ -67,8 +114,8 @@ useEffect(() => {
       sortable: false,
     },
     {
-      name: "Imge",
-      selector: (row) => <img src={row.user_image} />,
+      name: "Image",
+      selector: (row) => <img src={`${API_URL}/images/${row.user_image}`} />,
       sortable: false,
     },
     {
@@ -82,7 +129,7 @@ useEffect(() => {
           >
             <i
               className="fe fe-edit fa-2x"
-            //   onClick={() => handleUpdateShow(row)}
+                onClick={() => handleUpdate(row)}
             ></i>
             {/* </Link> */}
           </OverlayTrigger>
@@ -93,7 +140,7 @@ useEffect(() => {
           >
             <i
               className="mx-4 fe fe-trash-2 fa-2x text-red"
-            //   onClick={() => handleDelete(row)}
+              onClick={() => handleDelete(row)}
             ></i>
           </OverlayTrigger>
         </>
@@ -132,7 +179,12 @@ useEffect(() => {
             Add User
           </Link>
 
-          <UserModal show={showModal} setShow={setShowModal} />
+          <UserModal
+            show={showModal}
+            setShow={setShowModal}
+            state={state}
+            setState={setState}
+            fetchUser={ fetchUser} />
         </div>
       </div>
       <Row className=" row-sm">

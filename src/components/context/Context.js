@@ -29,6 +29,7 @@ export default function Context({ children }) {
         setUserInfo({
           name: admin?.name,
           email: admin?.email,
+          // adminid: admin?.admin
         });
         // setUserInfo(test)
         // alert(JSON.stringify(userInfo.name))
