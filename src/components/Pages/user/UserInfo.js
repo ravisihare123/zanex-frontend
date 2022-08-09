@@ -7,8 +7,7 @@ import { Row, Col, Card,OverlayTrigger,Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { post, API_URL } from "../../../helper/api";
 import * as Notification from "../../../components/Notifications/index"
-import { swatPopup } from "../../../components/Notifications/index";
-import { RoofingTwoTone } from "@mui/icons-material";
+
 
 
 export default function UserInfo() {
@@ -18,6 +17,7 @@ export default function UserInfo() {
   const [perPage, setPerPage] = useState(5)
   const [page, setPage] = useState(1)
   const [state, setState] = useState({})
+  
 
 
   const fetchUser = async () => {
@@ -88,7 +88,8 @@ useEffect(() => {
     //     Notification.swatCancel()
     //   }
     // })
-    setState({...row})
+    setState({ ...row })
+    
   }
     
 
@@ -170,6 +171,7 @@ useEffect(() => {
             to="#"
             className="btn btn-primary btn-icon text-white me-3"
             onClick={() => {
+              
               setShowModal(true);
             }}
           >

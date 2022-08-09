@@ -1,14 +1,14 @@
-import { NotificationsActive } from '@mui/icons-material';
 import React, {useEffect, useState } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
-import { post } from "../../../helper/api" 
+import { API_URL, post } from "../../../helper/api" 
 import axios from 'axios';
-import context from 'react-bootstrap/esm/AccordionContext';
+import { GetContext } from '../../context/Context';
+import * as Notification from "../../../components/Notifications"
 
 
 export default function UseModal({ show, setShow ,state, setState ,fetchUser }) {
 
-  // const { userInfo } = context();{}
+  const { userInfo } = GetContext();
   const [Id, setId] = useState("")
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -22,29 +22,35 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
 
   useEffect(() => {
     if (state.userid) {
-      alert(state.userid)
-      setId(state.userid)
-      setFirstName(state.firstName)
-      setLastName(state.lastName)
-      setPhoneNumber(state.phoneNumber)
-      setImage(state.image)
-      setShow(false)
-  }
+      // alert(JSON.stringify(state))
+      setId(state.userid);
+      setFirstName(state.first_name);
+      setLastName(state.last_name);
+      setPhoneNumber(state.phone_number);
+      setImage(state.user_image);
+      alert((state.user_image));
+      // alert(JSON.stringify(state))
+      alert(JSON.stringify(image))
+
+      setShow(true);
+    }
   }, [state])
-  alert(JSON.stringify("id",Id))
+  // alert(JSON.stringify("id",Id))
 
   const handleClose = () => {
-    // lastName (""),
-    // firstName ("")
-    // phoneNumber(""),
-    // image ("")
+    setId("")
+    setFirstName("")
+    setLastName("")
+    setPhoneNumber("")
+    setImage ("")
     setShow(false)
     setState({})
   };
+  // alert(JSON.stringify(Id))
   const handleSubmit = async (e) => {
     e.preventDefault();
     var formData = new FormData()
-    // formData.append("adminemail",userInfo.email)
+    formData.append("adminemail",userInfo?.email)
     formData.append("userid",Id )
     formData.append("firstname", firstName)
     formData.append("lastname", lastName)
@@ -57,17 +63,17 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
     //   img: image
       
     // }
-    alert(JSON.stringify(image));
+    // alert(JSON.stringify(image));
     
     const result = await axios.post("http://localhost:5000/user/insertUser", formData, {
       Headers:{"content-type":"multipart/formdata"}
     });
     if (result.status) {
-      // alert("success")
+      // alert(result.status);
       Notification.swatSuccess(result.msg)
       setShow(false)
       fetchUser()
-      setId("")
+      setId()
       setFirstName("")
       setLastName("")
       setPhoneNumber("")
@@ -78,12 +84,12 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
       alert(result.msg)
 
     }
-    setShow(false)
+    // setShow(false)
   }
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
-        <Modal.Title>Insert User Details</Modal.Title>
+        <Modal.Title>{Id==""?"Inserted":"Updated"} User Details</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
@@ -107,7 +113,7 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
             <Form.Control
               placeholder="Enter Last Name"
               type="text"
-              //   value={description}
+                value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               required
             />
@@ -118,7 +124,8 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
             </b>
             <Form.Control
               placeholder="Enter Number"
-              type="number"
+              type="tel"
+              value={phoneNumber}
               onChange={(e)=>setPhoneNumber(e.target.value)}
               required
             ></Form.Control>
@@ -129,6 +136,7 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
             </b>
             <Form.Control
               type="file"
+              value={image.filename}
               onChange={(event)=>handleImage(event)}
               required
             ></Form.Control>
