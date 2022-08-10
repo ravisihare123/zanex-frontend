@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import UserModal from "./UserModal";
 import { Row, Col, Card,OverlayTrigger,Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import { post, API_URL } from "../../../helper/api";
+import { post, API_URL, authHeader } from "../../../helper/api";
 import * as Notification from "../../../components/Notifications/index"
 
 
@@ -25,7 +25,9 @@ export default function UserInfo() {
       perpage: perPage,
       page: page
     }
-    var list = await post("user/displayUser",params)
+    var list = await post("user/displayUser", params, {
+      headers: authHeader()
+    })
     setData(list.data)
     setTotalRows(list.total)
   

@@ -136,7 +136,7 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
             </b>
             <Form.Control
               type="file"
-              value={image.filename}
+              // value={image.bytes}
               onChange={(event)=>handleImage(event)}
               required
             ></Form.Control>

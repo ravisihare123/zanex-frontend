@@ -8,6 +8,17 @@ const instance = axios.create(
     }
 )
 
+export function authHeader() {
+  // return authorization header with jwt token
+  let token = localStorage.getItem("token");
+
+  if (token) {
+    return { authorization: "Bearer " + token };
+  } else {
+    return {};
+  }
+}
+
 export const post = async (url, params, config) => {
     const { data } = await instance.post(url, params, config)
         .catch(function (error) {

@@ -5,8 +5,8 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import jwtDecode from "jwt-decode";
-const MyContext = createContext(null);
+import jwt_decode from "jwt-decode";
+export const MyContext = createContext(null);
 
 export function GetContext() {
   return useContext(MyContext);
@@ -23,7 +23,7 @@ export default function Context({ children }) {
     async function fetchData() {
       var token = await localStorage.getItem("token");
       if (token) {
-        const admin = jwtDecode(token);
+        const admin = jwt_decode(token);
         // alert(JSON.stringify(admin))
         
         setUserInfo({
