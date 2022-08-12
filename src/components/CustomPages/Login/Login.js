@@ -1,43 +1,56 @@
 import React, { useState,createContext } from "react";
 import { Link } from "react-router-dom";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as custompagesswitcherdata from "../../../data/Switcher/Custompagesswitcherdata";
 import jwt_decode from "jwt-decode";
+import { GetContext } from "../../context/Context";
+import * as  Notification from "../../../components/Notifications"
 export default function Login() {
   // const { email, setEmail, password, setPassword } = GetContext();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const {isLoading, setIsLoading} = GetContext()
   
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-
-    var result = await axios.post("http://localhost:5000/login/admindisplay", {
-      // email: email,
-      // password: password,
-      email: email,
-      password: password,
-    });
-    if (result.data) {
-      localStorage.setItem("token", result.data.token);
-      localStorage.setItem(
-        "email",
-        jwt_decode(result.data.token).email,
-        (result.data.token).name
+    try {
+      setIsLoading(true)
+      var result = await axios.post(
+        "http://localhost:5000/login/admindisplay",
+        {
+          email: email,
+          password: password,
+        }
       );
-      alert(JSON.stringify(result.data.status));
-      // alert(result.data.data + `${process.env.PUBLIC_URL}/dashboard`)
-
-      window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
-      // navigate(`${process.env.PUBLIC_URL}/dashboard`, {replace: true})
-      navigate(`${process.env.PUBLIC_URL}/dashboard`,{replace:true});
-    } else {
-      alert("invalid email or password!");
-      // localStorage.clear();
-      // window.location.reload();
+      if (result.data) {
+        localStorage.setItem("token", result.data.token);
+        localStorage.setItem(
+          "email",
+          jwt_decode(result.data.token).email,
+          result.data.token.name
+        );
+        Notification.success(result.msg)
+       
+        window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
+        navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
+      } else {
+        alert("invalid email or password!");
+        alert(result.status)
+        Notification.error(result.msg)
+      }
+      
     }
+    catch (err) {
+      alert(err)
+      setIsLoading(false)
+      Notification.error(err.message);
+      
+    }
+
+    
   };
   return (
     <div className="login-img">
@@ -92,36 +105,30 @@ export default function Login() {
                       <i className="zmdi zmdi-lock" aria-hidden="true"></i>
                     </span>
                   </div>
-                  <div className="text-end pt-1">
-                    <p className="mb-0">
-                      <Link
-                        to={`${process.env.PUBLIC_URL}/custompages/forgotPassword/`}
-                        className="text-primary ms-1"
-                      >
-                        Forgot Password?
-                      </Link>
-                    </p>
-                  </div>
                   <div className="container-login100-form-btn">
-                    <button
+                    <div className="btn-list btn-animation">
+                    <Button
                       type="button"
+                      disabled={isLoading}
                       onClick={() => handleSubmit()}
-                       className="btn btn-primary btn-block"
+                      className={
+                        isLoading
+                          ? "login100-form-btn btn-primary btn-loaders"
+                          : "login100-form-btn btn-primary"
+                      }
+                      variant="primary"
                     >
-                      login
-                    </button>
-                  </div>
-                  <div className="text-center pt-3">
-                    <p className="text-dark mb-0">
-                      Not a member?
-                      <Link
-                        to={`${process.env.PUBLIC_URL}/custompages/register/`}
-                        className="text-primary ms-1"
-                      >
-                        Create an Account
-                      </Link>
-                    </p>
-                  </div>
+                      {
+                        isLoading ? (
+                          <span className="loading"> loading</span>
+                        ) : (
+                            <span>Login</span>
+                        )
+                      }
+                    </Button>
+                    </div>
+                    </div>
+                 
                 </form>
               </Card.Body>
               <Card.Footer>

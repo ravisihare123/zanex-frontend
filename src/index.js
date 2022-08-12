@@ -12,7 +12,9 @@ const App = React.lazy(() => import("./components/app"));
 const Custompages = React.lazy(() => import("./components/custompages"));
 
 //Dashboard
-const Dashboard = React.lazy(()=> import("./components/Dashboard/Dashboard"));
+const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
+//Masters
+const Airport = React.lazy(() => import("./components/Pages/Master/Airport/AirportInfo"));
 
 //user
 const UserInfo = React.lazy(() => import("./components/Pages/user/UserInfo"));
@@ -55,6 +57,9 @@ const Root = () => {
                   <Route
                     path={`${process.env.PUBLIC_URL}/dashboard`}
                     element={<Dashboard />}
+                  />
+                  <Route path={`${process.env.PUBLIC_URL}/master/airport`}
+                    element={<Airport/>}
                   />
                   <Route path={`${process.env.PUBLIC_URL}/userinfo`}
                     element={<UserInfo />}

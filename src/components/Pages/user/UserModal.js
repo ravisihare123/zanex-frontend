@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
-import { API_URL, post } from "../../../helper/api" 
+import { API_URL, authHeader, post } from "../../../helper/api" 
 import axios from 'axios';
 import { GetContext } from '../../context/Context';
 import * as Notification from "../../../components/Notifications"
@@ -65,8 +65,9 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
     // }
     // alert(JSON.stringify(image));
     
-    const result = await axios.post("http://localhost:5000/user/insertUser", formData, {
-      Headers:{"content-type":"multipart/formdata"}
+    const result = await post("user/insertUser", formData, {
+      // Headers:{"content-type":"multipart/formdata"}
+      headers:authHeader()
     });
     if (result.status) {
       // alert(result.status);
@@ -80,9 +81,16 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
       setImage("")
     }
     else {
-      // alert("data not insert!!")
-      alert(result.msg)
-
+      // alert(JSON.stringify(result.status))
+      alert("Invalid token! data not insertd  ");
+      Notification.error(result.msg)
+      setShow(false);
+      fetchUser();
+      setId();
+      setFirstName("");
+      setLastName("");
+      setPhoneNumber("");
+      setImage("");
     }
     // setShow(false)
   }

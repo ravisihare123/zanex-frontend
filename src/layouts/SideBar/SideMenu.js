@@ -22,6 +22,19 @@ export const MENUITEMS = [
           },
         ],
       },
+      {
+        title: "Master",
+        icon: "database",
+        type: "sub",
+        active: false,
+        children: [
+          {
+            path: `${process.env.PUBLIC_URL}/master/airport`,
+            type: "link",
+            title:"Airport"
+          }
+        ]
+      }
     ],
   },
   // {

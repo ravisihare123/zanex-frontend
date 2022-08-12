@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -14,6 +15,7 @@ export function GetContext() {
 
 export default function Context({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [isLoading , setIsLoading] = useState(false)
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -38,15 +40,22 @@ export default function Context({ children }) {
     fetchData();
   }, []);
 
+  const handleLoading = useCallback(
+    (state) => {
+      setIsLoading(state)
+    },[isLoading]
+  )
+
     const values = useMemo(
       () => ({
-
+        isLoading,
+        setIsLoading,
         token,
         setToken,
         userInfo,
         setUserInfo,
        }),
-      [token,userInfo]
+      [token,userInfo,isLoading]
   );
   // alert(JSON.stringify({ "conext": userInfo.name }));
 
