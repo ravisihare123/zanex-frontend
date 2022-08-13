@@ -1,54 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import AirportModal from "./AirportModal";
-import { Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Card } from "react-bootstrap";
+import AircraftCategoryModal from "./AircraftCategoryModal";
+import { Row, Card, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import axios from "axios";
 import { authHeader, post } from "../../../../helper/api";
-import * as Notification from "../../../../components/Notifications";
+import * as Notification from "../../../Notifications"
 
-export default function AirportInfo() {
+export default function AircraftCategoryInfo() {
   const [showModal, setShowModal] = useState(false);
-  const [data, setData] = useState([]);
   const [state, setState] = useState({});
-
-  const handleDelete = (row) => {
-    var params = {
-      id: row.id,
-    };
-
-    Notification.swatPopup().then(async (result) => {
-      if (result.isConfirmed) {
-        var res = await post("master/delete_airport", params, {
-          headers: authHeader(),
-        });
-
-        if (res.st) {
-          Notification.swatSuccess(res.msg);
-        }
-        fetchAirport();
-      } else if (result.isDenied) {
-        Notification.swatCancel();
-      }
-    });
-  };
+  const [data, setData] = useState([]);
 
   const handleUpdateShow = (row) => {
     setState({ ...row });
   };
-  const fetchAirport = async () => {
-    const params = {};
-    var list = await post("master/airportlist", params, {
-      headers: authHeader(),
-    });
-    setData(list.data);
-  };
 
-  useEffect(() => {
-    fetchAirport();
-  }, []);
+    const handleDelete = (row) => {
+      var params = {
+        id: row.id,
+      };
+
+      Notification.swatPopup().then(async (result) => {
+        if (result.isConfirmed) {
+          var res = await post("master/deleteaircraftcategory", params, {
+            headers: authHeader(),
+          });
+
+          if (res.st) {
+            Notification.swatSuccess(res.msg);
+          }
+          fetchAircraftCategory();
+        } else if (result.isDenied) {
+          Notification.swatCancel();
+        }
+      });
+  };
 
   const deleteTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -60,6 +47,19 @@ export default function AirportInfo() {
       Edit
     </Tooltip>
   );
+
+  const fetchAircraftCategory = async () => {
+    var params = {};
+    var list = await post("master/aircraftcategorylist", params, {
+      headers: authHeader(),
+    });
+
+    setData(list.data);
+  };
+
+  useEffect(() => {
+    fetchAircraftCategory();
+  }, []);
 
   const columns = [
     {
@@ -73,13 +73,23 @@ export default function AirportInfo() {
       sortable: false,
     },
     {
-      name: "CODE",
-      selector: (row) => [row.code],
+      name: "CAPACITY",
+      selector: (row) => [row.capacity],
       sortable: false,
     },
     {
-      name: "TERMINAL",
-      selector: (row) => [row.terminal],
+      name: "FUAL-CHARGE",
+      selector: (row) => [row.fual_charge],
+      sortable: false,
+    },
+    {
+      name: "MAINTENANCE-HOUR",
+      selector: (row) => [row.maintenance_hour],
+      sortable: false,
+    },
+    {
+      name: "BLOCK-SEAT",
+      selector: (row) => [row.block_seat],
       sortable: false,
     },
     {
@@ -116,7 +126,7 @@ export default function AirportInfo() {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Airport</h1>
+          <h1 className="page-title">Aircraft-Category</h1>
           <Breadcrumb className="breadcrumb">
             <Breadcrumb.Item className="breadcrumb-item" href="#">
               Master
@@ -125,7 +135,7 @@ export default function AirportInfo() {
               className="breadcrumb-item active breadcrumds"
               aria-current="page"
             >
-              airport
+              Aircraft-Category
             </Breadcrumb.Item>
           </Breadcrumb>
         </div>
@@ -140,14 +150,14 @@ export default function AirportInfo() {
             <span>
               <i className="fe fe-plus"></i>&nbsp;
             </span>
-            Add airport
+            Add Aircraft-Category
           </Link>
-          <AirportModal
+          <AircraftCategoryModal
             show={showModal}
             setShow={setShowModal}
-            fetchAirport={fetchAirport}
             state={state}
             setState={setState}
+            fetchAircraftCategory={fetchAircraftCategory}
           />
         </div>
       </div>
@@ -182,9 +192,9 @@ export default function AirportInfo() {
                     highlightOnHover
                     paginationServer
                     // progressPending={loading}
-                    //   paginationTotalRows={totalRows}
-                    //   onChangeRowsPerPage={(perPage) => setPerPage(perPage)}
-                    //   onChangePage={(page) => setPage(page)}
+                    // paginationTotalRows={totalRows}
+                    // onChangeRowsPerPage={(perPage) => setPerPage(perPage)}
+                    // onChangePage={(page) => setPage(page)}
                   />
                 </div>
               </div>

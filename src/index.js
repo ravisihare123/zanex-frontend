@@ -15,6 +15,8 @@ const Custompages = React.lazy(() => import("./components/custompages"));
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
 //Masters
 const Airport = React.lazy(() => import("./components/Pages/Master/Airport/AirportInfo"));
+const AircraftCategory = React.lazy(() => import("./components/Pages/Master/AircraftCategory/AircraftCategoryInfo"))
+const Aircraft = React.lazy(()=>import("./components/Pages/Master/Aircraft/AircraftInfo"))
 
 //user
 const UserInfo = React.lazy(() => import("./components/Pages/user/UserInfo"));
@@ -51,17 +53,25 @@ const Root = () => {
                 path={`${process.env.PUBLIC_URL}/custompages/login`}
                 element={<Login />}
               />
-              <Route path={'/'} element={<OutletCheck/>}>
+              <Route path={"/"} element={<OutletCheck />}>
                 <Route path={`${process.env.PUBLIC_URL}/`} element={<App />}>
                   <Route index element={<Dashboard />} />
                   <Route
                     path={`${process.env.PUBLIC_URL}/dashboard`}
                     element={<Dashboard />}
                   />
-                  <Route path={`${process.env.PUBLIC_URL}/master/airport`}
-                    element={<Airport/>}
+                  <Route
+                    path={`${process.env.PUBLIC_URL}/master/airport`}
+                    element={<Airport />}
                   />
-                  <Route path={`${process.env.PUBLIC_URL}/userinfo`}
+                  <Route
+                    path={`${process.env.PUBLIC_URL}/master/aircraftcategory`}
+                    element={<AircraftCategory />}
+                  />
+                  <Route path={`${process.env.PUBLIC_URL}/master/aircraft`}
+                    element={ <Aircraft/>} />
+                  <Route
+                    path={`${process.env.PUBLIC_URL}/userinfo`}
                     element={<UserInfo />}
                   />
                 </Route>

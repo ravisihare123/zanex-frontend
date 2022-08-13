@@ -31,10 +31,20 @@ export const MENUITEMS = [
           {
             path: `${process.env.PUBLIC_URL}/master/airport`,
             type: "link",
-            title:"Airport"
-          }
-        ]
-      }
+            title: "Airport",
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/master/aircraftcategory`,
+            type: "link",
+            title: "Aircraft Categroy",
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/master/aircraft`,
+            type: "link",
+            title: "Aircraft",
+          },
+        ],
+      },
     ],
   },
   // {
