@@ -43,6 +43,26 @@ export const MENUITEMS = [
             type: "link",
             title: "Aircraft",
           },
+          {
+            path: `${process.env.PUBLIC_URL}/master/fargrade`,
+            type: "link",
+            title: "FarGrade",
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/master/pilot`,
+            type: "link",
+           title: "Pilot",
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/master/chargetable`,
+            type: "link",
+            title: "Charge Table"
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/master/pax`,
+            type: "link",
+            title: "pax"
+          }
         ],
       },
     ],

@@ -9,7 +9,7 @@ import { GetContext } from "../../context/Context";
 import * as  Notification from "../../../components/Notifications"
 export default function Login() {
   // const { email, setEmail, password, setPassword } = GetContext();
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const {isLoading, setIsLoading} = GetContext()
   
@@ -19,29 +19,26 @@ export default function Login() {
     try {
       setIsLoading(true)
       var result = await axios.post(
-        "http://localhost:5000/login/admindisplay",
+        "http://localhost:5000/admin/adminlogin",
         {
-          email: email,
+          username: username,
           password: password,
         }
       );
-      if (result.data) {
+      if (result.status) {
         localStorage.setItem("token", result.data.token);
-        localStorage.setItem(
-          "email",
-          jwt_decode(result.data.token).email,
-          result.data.token.name
-        );
+        alert(result.data.token)
+        localStorage.setItem("uid",jwt_decode(result.data.token).id);
         Notification.success(result.msg)
-       
-        window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
+      //  window.location.reload()
+        // window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
         navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
       } else {
         alert("invalid email or password!");
         alert(result.status)
         Notification.error(result.msg)
       }
-      
+      setIsLoading(false)
     }
     catch (err) {
       alert(err)
@@ -86,7 +83,7 @@ export default function Login() {
                       className="input100"
                       type="text"
                       placeholder="Email"
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                     <span className="focus-input100"></span>
                     <span className="symbol-input100">

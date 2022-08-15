@@ -16,7 +16,12 @@ const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
 //Masters
 const Airport = React.lazy(() => import("./components/Pages/Master/Airport/AirportInfo"));
 const AircraftCategory = React.lazy(() => import("./components/Pages/Master/AircraftCategory/AircraftCategoryInfo"))
-const Aircraft = React.lazy(()=>import("./components/Pages/Master/Aircraft/AircraftInfo"))
+const Aircraft = React.lazy(() => import("./components/Pages/Master/Aircraft/AircraftInfo"))
+const FarGrade = React.lazy(() => import("./components/Pages/Master/FarGrade/FarGradeInfo"));
+const Pilot = React.lazy(() => import('./components/Pages/Master/Pilot/PilotInfo'));
+const Pax = React.lazy(() => import('./components/Pages/Master/Pax/PaxInfo'));
+const ChargeTable = React.lazy(() => import("./components/Pages/Master/ChargeTable/ChargeTableInfo"));
+
 
 //user
 const UserInfo = React.lazy(() => import("./components/Pages/user/UserInfo"));
@@ -69,7 +74,20 @@ const Root = () => {
                     element={<AircraftCategory />}
                   />
                   <Route path={`${process.env.PUBLIC_URL}/master/aircraft`}
-                    element={ <Aircraft/>} />
+                    element={<Aircraft />} />
+                  
+                  <Route path={`${process.env.PUBLIC_URL}/master/fargrade`}
+                    element={<FarGrade />}
+                  />
+                  <Route path={`${process.env.PUBLIC_URL}/master/pilot`}
+                    element={<Pilot/>}
+                  />
+                  <Route path={`${process.env.PUBLIC_URL}/master/pax`}
+                    element={<Pax/>}
+                  />
+                  <Route path={`${process.env.PUBLIC_URL}/master/chargetable`}
+                    element={<ChargeTable/>}
+                  />
                   <Route
                     path={`${process.env.PUBLIC_URL}/userinfo`}
                     element={<UserInfo />}

@@ -1,26 +1,71 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { post, get, authHeader } from "../../../../helper/api";
+import * as Notification from "../../../Notifications"
 
-export default function AircraftModal({ show, setShow }) {
-    
-     const [Id, setId] = useState("");
-     const [name, setName] = useState("");
-     const [pnumber, setPNumber] = useState("");
-     const [aircraftCategoryList, setAircraftCategoryList] = useState([]);
-    const [categoryId, setcategoryId] = useState("");
-    
-     const handleClose = () => {
-       setId("");
-       setName("");
-       setPNumber("");
-       setcategoryId("");
-    //    setState({});
-       setShow(false);
+export default function AircraftModal({ show, setShow, state, setState, fetchaircraft }) {
+  const [Id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [pnumber, setPNumber] = useState("");
+  const [aircraftCategoryList, setAircraftCategoryList] = useState([]);
+  const [categoryId, setcategoryId] = useState("");
+
+  const handleClose = () => {
+    setId("");
+    setName("");
+    setPNumber("");
+    setcategoryId("");
+       setState({});
+    setShow(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    var params = {
+      // uid: userInfo.uid,
+      id: Id,
+      name: name,
+      plane_no: pnumber,
+      category_id: categoryId,
     };
-    
-    const handleSubmit = () => {
-        
+
+    const result = await post("master/inserteditaircraft", params, {
+      headers: authHeader(),
+    });
+
+    if (result.status) {
+      Notification.swatSuccess(result.msg);
+      setShow(false);
+      fetchaircraft();
+      setId("");
+      setName("");
+      setPNumber("");
+      setcategoryId("");
+    } else {
+      alert(result.msg);
     }
+  };
+
+  //// fetch aircraftcategory name
+  const getAircraftCategory = async () => {
+    const result = await get("master/getaircraftcategory", {
+      headers: authHeader(),
+    });
+
+    setAircraftCategoryList(result.data);
+  };
+
+  useEffect(() => {
+    if (state.id) {
+      setId(state.id)
+      setName(state.name)
+      setPNumber(state.plane_no)
+      setcategoryId(state.category_id)
+      setShow(true)
+    }
+    getAircraftCategory();
+  }, [state]);
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
@@ -60,7 +105,6 @@ export default function AircraftModal({ show, setShow }) {
             </b>
             <FloatingLabel
               controlId="floatingSelectGrid"
-              label="Aircraft Category Name"
             >
               <Form.Select
                 aria-label="Floating label select example"
