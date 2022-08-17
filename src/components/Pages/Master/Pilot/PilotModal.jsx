@@ -1,10 +1,13 @@
-import React,{useState, useEffect} from 'react'
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { authHeader, post } from '../../../../helper/api';
+import { authHeader, post } from "../../../../helper/api";
 import * as Notification from "../../../Notifications";
+import {GetContext} from "../../../context/Context"
+import axios from "axios";
 
+function PilotModal({ show, setShow, state, setState }) {
+  const { userInfo } = GetContext();
 
-export default function PilotModal({ show, setShow, state, setState, fetchPilot }) {
   const [Id, setId] = useState("");
   const [name, setName] = useState("");
   const [mobile, setmMobile] = useState("");
@@ -14,6 +17,13 @@ export default function PilotModal({ show, setShow, state, setState, fetchPilot 
   const [licenceNo, setLicenceNo] = useState("");
   const [licenceDoc, setLicenceDoc] = useState([]);
   const [govDoc, setGovDoc] = useState([]);
+
+  const licenceChange = (e) => {
+    setLicenceDoc(e.target.files[0]);
+  };
+  const GovChange = (e) => {
+    setGovDoc(e.target.files[0]);
+  };
 
   const handleClose = () => {
     setId("");
@@ -28,13 +38,13 @@ export default function PilotModal({ show, setShow, state, setState, fetchPilot 
     setState({});
     setShow(false);
   };
-  
-  const handleSubmit = async (e) => {
+
+  const submitPilot = async (e) => {
     e.preventDefault();
 
-    var formData = new FormData();
-    // formData.append("uid", userInfo.uid);
-    formData.append("id", Id);
+    const formData = new FormData();
+    formData.append("uid", userInfo.uid);
+    // formData.append("id", Id);
     formData.append("name", name);
     formData.append("mobile", mobile);
     formData.append("alt_mobile", altMobile);
@@ -44,14 +54,21 @@ export default function PilotModal({ show, setShow, state, setState, fetchPilot 
     formData.append("licence_doc", licenceDoc);
     formData.append("gov_doc", govDoc);
 
-    const result = await post("master/inserteditpilot", formData, {
-      headers: authHeader(),
-    });
+    const res = await axios.post(
+      "http://localhost:5000/master/insertEditPilot",
+      formData,
+      {
+        headers: {
+          Authorization:"Bearer "+localStorage.getItem("token"),
+          "content-type": "multipart/formdata",
+        },
+      }
+    );
 
-    if (result.status) {
-      Notification.swatSuccess(result.msg);
+    if (res.st) {
+      Notification.swatSuccess(res.msg);
       setShow(false);
-      fetchPilot();
+      // PilotList();
       setId("");
       setName("");
       setmMobile("");
@@ -62,40 +79,31 @@ export default function PilotModal({ show, setShow, state, setState, fetchPilot 
       setLicenceDoc([]);
       setGovDoc([]);
     } else {
-      alert(result.msg);
+      alert(res.msg);
     }
   };
 
   useEffect(() => {
     if (state.id) {
-      setId(state.id)
-      setName(state.name)
-      setmMobile(state.mobile)
-      setAltMobile(state.alt_mobile)
-      setEmail(state.email)
-      setAddress(state.address)
-      setLicenceNo(state.licence_no)
-      setLicenceDoc(state.licence_doc)
-      setGovDoc(state.gov_doc)
-      setShow(true)
+      setId(state.id);
+      setName(state.name);
+      setmMobile(state.mobile);
+      setAltMobile(state.alt_mobile);
+      setEmail(state.email);
+      setAddress(state.address);
+      setLicenceNo(state.licence_no);
+      setLicenceDoc(state);
+      setGovDoc(state);
+      setShow(true);
     }
-  }, [state])
-  
+  }, [state]);
 
-
-  const licenceChange = (event) => {
-    setLicenceDoc(event.target.files[0])
-    
-  }
-  const GovChange = (event)=>{
-    setGovDoc(event.target.files[0])
-  }
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>{Id === "" ? "Insert" : "Update"} Form Data</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={submitPilot}>
         <Modal.Body>
           <Form.Group controlId="formFile" className="mb-3">
             <b>
@@ -216,3 +224,5 @@ export default function PilotModal({ show, setShow, state, setState, fetchPilot 
     </Modal>
   );
 }
+
+export default PilotModal;

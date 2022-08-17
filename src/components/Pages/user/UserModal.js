@@ -66,7 +66,7 @@ export default function UseModal({ show, setShow ,state, setState ,fetchUser }) 
     // alert(JSON.stringify(image));
     
     const result = await post("user/insertUser", formData, {
-      // Headers:{"content-type":"multipart/formdata"}
+      // Headers:
       headers:authHeader()
     });
     if (result.status) {

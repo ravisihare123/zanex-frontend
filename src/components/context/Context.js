@@ -17,8 +17,8 @@ export default function Context({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLoading , setIsLoading] = useState(false)
   const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
+    userName: null,
+    uid: null,
   });
 
   useEffect(() => {
@@ -29,9 +29,8 @@ export default function Context({ children }) {
         // alert(JSON.stringify(admin))
         
         setUserInfo({
-          name: admin?.name,
-          email: admin?.email,
-          // adminid: admin?.admin
+          userName: admin?.name,
+          uid: admin.id,
         });
         // setUserInfo(test)
         // alert(JSON.stringify(userInfo.name))

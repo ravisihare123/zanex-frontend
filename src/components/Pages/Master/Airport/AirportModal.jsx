@@ -4,8 +4,10 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { authHeader } from "../../../../helper/api";
 import * as Notification from "../../../Notifications"
 import {post } from "../../../../helper/api"
+import { GetContext } from "../../../context/Context";
 
 export default function AirportModal({ show, setShow, state, setState, fetchAirport }) {
+  const {userInfo}= GetContext()
   const [id, setId] = useState("")
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -16,6 +18,7 @@ export default function AirportModal({ show, setShow, state, setState, fetchAirp
     setName("")
     setCode("")
     setTerminal("")
+    setState({})
     setShow(false);
   };
 
@@ -32,6 +35,7 @@ export default function AirportModal({ show, setShow, state, setState, fetchAirp
   const handleSubmit = async (e) => {
     e.preventDefault();
     var params = {
+      uid: userInfo.uid,
       id: id,
       name: name,
       code: code,

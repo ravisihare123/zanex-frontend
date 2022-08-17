@@ -202,7 +202,7 @@ export function Header() {
                     >
                       <div className="drop-heading">
                         <div className="text-center">
-                          <h5 className="text-dark mb-0">{ userInfo?.name}</h5>
+                          <h5 className="text-dark mb-0">{ userInfo?.userName}</h5>
                           <small className="text-muted">Administrator</small>
                         </div>
                       </div>

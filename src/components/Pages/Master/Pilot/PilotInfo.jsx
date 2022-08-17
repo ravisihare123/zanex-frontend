@@ -14,11 +14,13 @@ import { API_URL, authHeader, post } from "../../../../helper/api";
 
 import * as Notification from "../../../Notifications"
 import PilotModal from "./PilotModal"
+import { GetContext } from "../../../context/Context";
 
 export default function PilotInfo() {
   const [showModal, setShowModal] = useState(false)
   const [data, setData] = useState([]);
   const [state, setState] = useState({})
+  const { userInfo} = GetContext()
   
   const columns = [
     {
@@ -129,7 +131,7 @@ export default function PilotInfo() {
   },[])
  const handleDelete = (row) => {
    var params = {
-    //  uid: userInfo.uid,
+     uid: userInfo.uid,
      id: row.id,
    };
 

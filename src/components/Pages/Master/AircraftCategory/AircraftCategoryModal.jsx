@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { post, authHeader } from "../../../../helper/api";
+import { GetContext } from "../../../context/Context";
 import * as Notification from "../../../Notifications" 
 
 export default function AircraftCategoryModal({
@@ -16,6 +17,7 @@ export default function AircraftCategoryModal({
   const [fualCharge, setFualCharge] = useState("");
   const [maintenanceHour, setMaintenanceHour] = useState("");
   const [blockSeat, setBlockSeat] = useState("");
+  const {userInfo} = GetContext()
 
     
   const handleClose = () => {
@@ -46,6 +48,7 @@ export default function AircraftCategoryModal({
     event.preventDefault();
 
     var params = {
+      uid: userInfo.uid,
       id: Id,
       name: name,
       capacity: capacity,

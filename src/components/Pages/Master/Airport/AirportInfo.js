@@ -8,14 +8,17 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { authHeader, post } from "../../../../helper/api";
 import * as Notification from "../../../../components/Notifications";
+import { GetContext } from "../../../context/Context";
 
 export default function AirportInfo() {
+  const {userInfo} = GetContext()
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const [state, setState] = useState({});
 
   const handleDelete = (row) => {
     var params = {
+      uid: userInfo.uid,
       id: row.id,
     };
 

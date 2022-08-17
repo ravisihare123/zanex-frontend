@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { post, get, authHeader } from "../../../../helper/api";
 import * as Notification from "../../../Notifications"
+import { GetContext } from '../../../context/Context';
 
 export default function AircraftModal({ show, setShow, state, setState, fetchaircraft }) {
   const [Id, setId] = useState("");
@@ -9,6 +10,7 @@ export default function AircraftModal({ show, setShow, state, setState, fetchair
   const [pnumber, setPNumber] = useState("");
   const [aircraftCategoryList, setAircraftCategoryList] = useState([]);
   const [categoryId, setcategoryId] = useState("");
+  const { userInfo} = GetContext()
 
   const handleClose = () => {
     setId("");
@@ -23,7 +25,7 @@ export default function AircraftModal({ show, setShow, state, setState, fetchair
     e.preventDefault();
 
     var params = {
-      // uid: userInfo.uid,
+      uid: userInfo.uid,
       id: Id,
       name: name,
       plane_no: pnumber,

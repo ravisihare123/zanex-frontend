@@ -12,11 +12,13 @@ import {
 } from "react-bootstrap";
 import { post, authHeader } from "../../../../helper/api";
 import * as Notification from "../../../Notifications";
+import { GetContext } from '../../../context/Context';
 
 export default function AircraftInfo() {
   const [showModal, setShowModal] = useState(false)
   const [data, setData] = useState([]);
   const [state, setState] = useState({})
+  const {userInfo} = GetContext()
 
    const deleteTooltip = (props) => (
      <Tooltip id="button-tooltip" {...props}>
@@ -34,6 +36,7 @@ export default function AircraftInfo() {
   };
  const handleDelete = (row) => {
    var params = {
+     uid: userInfo.uid,
      id: row.id,
    };
 

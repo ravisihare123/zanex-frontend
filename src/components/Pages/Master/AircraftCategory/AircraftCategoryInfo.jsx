@@ -6,11 +6,13 @@ import { Row, Card, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import DataTable from "react-data-table-component";
 import { authHeader, post } from "../../../../helper/api";
 import * as Notification from "../../../Notifications"
+import { GetContext } from "../../../context/Context";
 
 export default function AircraftCategoryInfo() {
   const [showModal, setShowModal] = useState(false);
   const [state, setState] = useState({});
   const [data, setData] = useState([]);
+  const { userInfo} = GetContext()
 
   const handleUpdateShow = (row) => {
     setState({ ...row });
@@ -18,17 +20,18 @@ export default function AircraftCategoryInfo() {
 
     const handleDelete = (row) => {
       var params = {
+        uid: userInfo.uid,
         id: row.id,
       };
 
       Notification.swatPopup().then(async (result) => {
         if (result.isConfirmed) {
-          var res = await post("master/deleteaircraftcategory", params, {
+          var result = await post("master/deleteaircraftcategory", params, {
             headers: authHeader(),
           });
 
-          if (res.st) {
-            Notification.swatSuccess(res.msg);
+          if (result.status) {
+            Notification.swatSuccess(result.msg);
           }
           fetchAircraftCategory();
         } else if (result.isDenied) {
