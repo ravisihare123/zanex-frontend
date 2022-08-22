@@ -5,7 +5,7 @@ import * as Notification from "../../../Notifications";
 import {GetContext} from "../../../context/Context"
 import axios from "axios";
 
-function PilotModal({ show, setShow, state, setState }) {
+function PilotModal({ show, setShow, state, setState,fetchPilot }) {
   const { userInfo } = GetContext();
 
   const [Id, setId] = useState("");
@@ -15,14 +15,20 @@ function PilotModal({ show, setShow, state, setState }) {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [licenceNo, setLicenceNo] = useState("");
-  const [licenceDoc, setLicenceDoc] = useState([]);
-  const [govDoc, setGovDoc] = useState([]);
+  const [licenceDoc, setLicenceDoc] = useState({ bytes: "", filename: "" });
+  const [govDoc, setGovDoc] = useState({ bytes: "", filename: "" });
+
 
   const licenceChange = (e) => {
-    setLicenceDoc(e.target.files[0]);
+    setLicenceDoc({ bytes: e.target.files[0], filename: URL.createObjectURL(e.target.files[0]) });
+  
   };
+  
   const GovChange = (e) => {
-    setGovDoc(e.target.files[0]);
+    setGovDoc({
+      bytes: e.target.files[0],
+      filename: URL.createObjectURL(e.target.files[0]),
+    })
   };
 
   const handleClose = () => {
@@ -33,42 +39,36 @@ function PilotModal({ show, setShow, state, setState }) {
     setEmail("");
     setAddress("");
     setLicenceNo("");
-    setLicenceDoc([]);
-    setGovDoc([]);
+    setLicenceDoc({});
+    setGovDoc({});
     setState({});
     setShow(false);
   };
 
-  const submitPilot = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("uid", userInfo.uid);
-    // formData.append("id", Id);
+    formData.append("id", Id);
     formData.append("name", name);
     formData.append("mobile", mobile);
     formData.append("alt_mobile", altMobile);
     formData.append("email", email);
     formData.append("address", address);
     formData.append("licence_no", licenceNo);
-    formData.append("licence_doc", licenceDoc);
-    formData.append("gov_doc", govDoc);
+    formData.append("licence_doc", licenceDoc.bytes);
+    formData.append("gov_doc", govDoc.bytes);
 
-    const res = await axios.post(
-      "http://localhost:5000/master/insertEditPilot",
-      formData,
-      {
-        headers: {
-          Authorization:"Bearer "+localStorage.getItem("token"),
-          "content-type": "multipart/formdata",
-        },
-      }
+    const res = await post("master/insertEditPilot", formData,
+      {headers: authHeader()}
     );
 
-    if (res.st) {
+    if (res.status) {
+      // alert(res.status)
       Notification.swatSuccess(res.msg);
       setShow(false);
-      // PilotList();
+      fetchPilot();
       setId("");
       setName("");
       setmMobile("");
@@ -76,8 +76,8 @@ function PilotModal({ show, setShow, state, setState }) {
       setEmail("");
       setAddress("");
       setLicenceNo("");
-      setLicenceDoc([]);
-      setGovDoc([]);
+      setLicenceDoc({});
+      setGovDoc({});
     } else {
       alert(res.msg);
     }
@@ -92,19 +92,20 @@ function PilotModal({ show, setShow, state, setState }) {
       setEmail(state.email);
       setAddress(state.address);
       setLicenceNo(state.licence_no);
-      setLicenceDoc(state);
+      setLicenceDoc(state.licence_doc);
       setGovDoc(state);
       setShow(true);
+      alert(JSON.stringify(licenceDoc.filename))
     }
   }, [state]);
-
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>{Id === "" ? "Insert" : "Update"} Form Data</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={submitPilot}>
+      <Form onSubmit={handleSubmit}>
         <Modal.Body>
+          <pre>{ }</pre>
           <Form.Group controlId="formFile" className="mb-3">
             <b>
               <Form.Label>Enter Pilot Name</Form.Label>
@@ -195,6 +196,7 @@ function PilotModal({ show, setShow, state, setState }) {
               type="file"
               size="lg"
               placeholder="Licence Doc"
+              value={licenceDoc.filename}
               onChange={licenceChange}
             />
           </Form.Group>

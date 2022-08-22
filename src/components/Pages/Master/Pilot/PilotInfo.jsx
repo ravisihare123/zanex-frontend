@@ -20,7 +20,7 @@ export default function PilotInfo() {
   const [showModal, setShowModal] = useState(false)
   const [data, setData] = useState([]);
   const [state, setState] = useState({})
-  const { userInfo} = GetContext()
+  const { userInfo } = GetContext()
   
   const columns = [
     {
@@ -63,7 +63,7 @@ export default function PilotInfo() {
       button: true,
       cell: (row) => (
         <a
-          href={`${API_URL}` + row.licence_doc}
+          href={`${API_URL}/images/${row.licence_doc}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -78,7 +78,7 @@ export default function PilotInfo() {
       button: true,
       cell: (row) => (
         <a
-          href={`${API_URL}` + row.gov_doc}
+          href={`${API_URL}/images/${row.gov_doc}`}
           target="_blank"
           rel="noopener noreferrer"
         >

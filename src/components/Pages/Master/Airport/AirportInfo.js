@@ -28,7 +28,7 @@ export default function AirportInfo() {
           headers: authHeader(),
         });
 
-        if (res.st) {
+        if (res.status) {
           Notification.swatSuccess(res.msg);
         }
         fetchAirport();
@@ -46,7 +46,15 @@ export default function AirportInfo() {
     var list = await post("master/airportlist", params, {
       headers: authHeader(),
     });
-    setData(list.data);
+    setData(list.data)
+    // if (list.status) {
+    // setData(list.data);
+    // alert(JSON.stringify(list));  
+    // } else {
+    //   localStorage.clear();
+    //   window.location.reload()
+    // }
+    
   };
 
   useEffect(() => {
