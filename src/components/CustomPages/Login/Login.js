@@ -31,8 +31,8 @@ export default function Login() {
         localStorage.setItem("uid",jwt_decode(result.data.token).id);
         Notification.success(result.msg)
       //  window.location.reload()
-        // window.location.replace(`${process.env.PUBLIC_URL}/dashboard`);
-        navigate(`${process.env.PUBLIC_URL}/dashboard`, { replace: true });
+        // window.location.replace(`/dashboard`);
+        navigate(`/dashboard`, { replace: true });
       } else {
         alert("invalid email or password!");
         alert(result.status)

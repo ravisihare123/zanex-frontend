@@ -10,7 +10,7 @@ export default function OutletCheck() {
     // alert(JSON.stringify(token))
   return (
     <div>
-        {token==null?<Navigate to={`${process.env.PUBLIC_URL}/custompages/login`}/>:<Outlet/>}
+        {token===null?<Navigate to={`/custompages/login`}/>:<Outlet/>}
     </div>
   )
 }

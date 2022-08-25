@@ -21,6 +21,8 @@ const FarGrade = React.lazy(() => import("./components/Pages/Master/FarGrade/Far
 const Pilot = React.lazy(() => import('./components/Pages/Master/Pilot/PilotInfo'));
 const Pax = React.lazy(() => import('./components/Pages/Master/Pax/PaxInfo'));
 const ChargeTable = React.lazy(() => import("./components/Pages/Master/ChargeTable/ChargeTableInfo"));
+const ChargeTableProvider = React.lazy(() => import('./components/Pages/Master/ChargeTable/ChargeTableContext'));
+const ChargeTableForm  = React.lazy(()=>import("./components/Pages/Master/ChargeTable/ChargeTableForm"))
 
 
 //user
@@ -46,7 +48,7 @@ const Loaderimg = () => {
 };
 const Root = () => {
 
-  console.log(process.env.PUBLIC_URL)
+  // console.log(process.env.PUBLIC_URL)
 
   return (
     <Fragment>
@@ -54,60 +56,45 @@ const Root = () => {
         <React.Suspense fallback={Loaderimg()}>
           <Context>
             <Routes>
-              <Route
-                path={`${process.env.PUBLIC_URL}/custompages/login`}
-                element={<Login />}
-              />
+              <Route path={`/custompages/login`} element={<Login />} />
               <Route path={"/"} element={<OutletCheck />}>
-                <Route path={`${process.env.PUBLIC_URL}/`} element={<App />}>
-                  <Route index element={<Dashboard />} />
+                <Route path={`/`} element={<App />}>
+                  {/* <Route index element={<Dashboard />} /> */}
+                  <Route path={`/dashboard`} element={<Dashboard />} />
+                  <Route path={`/master/airport`} element={<Airport />} />
                   <Route
-                    path={`${process.env.PUBLIC_URL}/dashboard`}
-                    element={<Dashboard />}
-                  />
-                  <Route
-                    path={`${process.env.PUBLIC_URL}/master/airport`}
-                    element={<Airport />}
-                  />
-                  <Route
-                    path={`${process.env.PUBLIC_URL}/master/aircraftcategory`}
+                    path={`/master/aircraftcategory`}
                     element={<AircraftCategory />}
                   />
-                  <Route path={`${process.env.PUBLIC_URL}/master/aircraft`}
-                    element={<Aircraft />} />
-                  
-                  <Route path={`${process.env.PUBLIC_URL}/master/fargrade`}
-                    element={<FarGrade />}
-                  />
-                  <Route path={`${process.env.PUBLIC_URL}/master/pilot`}
-                    element={<Pilot/>}
-                  />
-                  <Route path={`${process.env.PUBLIC_URL}/master/pax`}
-                    element={<Pax/>}
-                  />
-                  <Route path={`${process.env.PUBLIC_URL}/master/chargetable`}
-                    element={<ChargeTable/>}
-                  />
+                  <Route path={`/master/aircraft`} element={<Aircraft />} />
+
+                  <Route path={`/master/fargrade`} element={<FarGrade />} />
+                  <Route path={`/master/pilot`} element={<Pilot />} />
+                  <Route path={`/master/pax`} element={<Pax />} />
+                  <Route path={`/master/chargetable`} element={<ChargeTable />}/>
                   <Route
-                    path={`${process.env.PUBLIC_URL}/userinfo`}
-                    element={<UserInfo />}
+                    path={`/master/chargetable/form`}
+                    element={
+                      <ChargeTableProvider>
+                        <ChargeTableForm />
+                      </ChargeTableProvider>
+                    }
                   />
+
+                  <Route path={`/userinfo`} element={<UserInfo />} />
                 </Route>
 
-                <Route
-                  path={`${process.env.PUBLIC_URL}/`}
-                  element={<Custompages />}
-                >
+                <Route path={`/`} element={<Custompages />}>
                   <Route
-                    path={`${process.env.PUBLIC_URL}/custompages/register`}
+                    path={`/custompages/register`}
                     element={<Register />}
                   />
                   <Route
-                    path={`${process.env.PUBLIC_URL}/custompages/forgotPassword`}
+                    path={`/custompages/forgotPassword`}
                     element={<ForgotPassword />}
                   />
                   <Route
-                    path={`${process.env.PUBLIC_URL}/custompages/lockScreen`}
+                    path={`/custompages/lockScreen`}
                     element={<LockScreen />}
                   />
                 </Route>

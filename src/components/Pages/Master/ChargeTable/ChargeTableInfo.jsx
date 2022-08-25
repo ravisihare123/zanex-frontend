@@ -22,7 +22,7 @@ export default function ChargeTableInfo() {
         </div>
         <div className="ms-auto pageheader-btn">
           <Link
-            to="/master/ChargeTable/InsertEdit"
+            to="/master/chargetable/form"
             className="btn btn-primary btn-icon text-white me-3"
           >
             <span>

@@ -68,7 +68,7 @@ export function Header() {
   const handleSignOut = ()=>{
     alert("logout with clear token");
     localStorage.clear()
-    navigate(`${process.env.PUBLIC_URL}/custompages/login`)
+    navigate(`/custompages/login`)
   }
   return (
     <Navbar expand="md" className="app-header header sticky">
@@ -82,7 +82,7 @@ export function Header() {
           ></Link>
           <div className="responsive-logo">
             <Link
-              to={`${process.env.PUBLIC_URL}/dashboard/`}
+              to={`/dashboard/`}
               className="header-logo"
             >
               <img
@@ -99,7 +99,7 @@ export function Header() {
           </div>
           <Link
             className="logo-horizontal "
-            to={`${process.env.PUBLIC_URL}/dashboard/`}
+            to={`/dashboard/`}
           >
             <img
               src={require("../../assets/images/brand/logo.png")}
@@ -209,7 +209,7 @@ export function Header() {
                       <div className="dropdown-divider m-0"></div>
                       
                       <Dropdown.Item
-                        href={`${process.env.PUBLIC_URL}/custompages/login/`}
+                        href={`/custompages/login/`}
                       >
                         <i className="dropdown-icon fe fe-alert-circle"></i>
                         <span onClick={()=>handleSignOut()}>Sign out</span> 

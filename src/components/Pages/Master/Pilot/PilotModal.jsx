@@ -95,7 +95,6 @@ function PilotModal({ show, setShow, state, setState,fetchPilot }) {
       setLicenceDoc(state.licence_doc);
       setGovDoc(state);
       setShow(true);
-      alert(JSON.stringify(licenceDoc.filename))
     }
   }, [state]);
   return (
@@ -196,7 +195,7 @@ function PilotModal({ show, setShow, state, setState,fetchPilot }) {
               type="file"
               size="lg"
               placeholder="Licence Doc"
-              value={licenceDoc.filename}
+              // value={licenceDoc.filename}
               onChange={licenceChange}
             />
           </Form.Group>
