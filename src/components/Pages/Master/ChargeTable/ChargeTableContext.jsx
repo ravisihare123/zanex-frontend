@@ -12,10 +12,12 @@ export default function ChargeTableProvider({ children }) {
     const [chargeName, setChargeName] = useState("")
     const [convenienceCharge, setConvenienceCharge] = useState("")
     const [overWeightCharge, setOverWeightCharge] = useState("")
+    const [Id, setId]  = useState("")
     const [rebooking, setRebooking] = useState([])
     const [pTypeData, setPTypeData] = useState([])
     const [noshow, setNoshow] = useState([])
     const [cancel, setCancel] = useState([])
+    const [editlist, setEditlist] = useState([])
     const [value, setValue] = useState("")
     const [hours, setHours] = useState("")
     return (
@@ -40,7 +42,11 @@ export default function ChargeTableProvider({ children }) {
                 hours,
                 setHours,
                 cancel,
-                setCancel
+                setCancel,
+                editlist,
+                setEditlist,
+                Id,
+                setId
             }}
         >
             {children}

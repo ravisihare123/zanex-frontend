@@ -12,25 +12,64 @@ import {
 import { useChargeTableContext } from './ChargeTableContext';
 import Select from "react-select";
 import { authHeader, get, post } from "../../../../helper/api";
+import { GetContext } from "../../../context/Context";
+import { useNavigate, useLocation } from 'react-router-dom';
+import * as Notification from "../../../Notifications";
 
 export default function ChargeTableForm() {
 
   const {
     count,
-    setPTypeData
-  
-  } = useChargeTableContext()
-  
+    setPTypeData,
+    setChargeName,
+    setConvenienceCharge,
+    setOverWeightCharge,
+    setId,
+    setRebooking,
+    setNoshow,
+    setCancel,
+    setEditlist,
+  } = useChargeTableContext();
+
+  const location = useLocation()
+
   const fetchPax = async () => {
+    
     const result = await get("master/getpax", {
       headers: authHeader()
     })
     // alert(JSON.stringify(result.data))
     setPTypeData(result.data)
   }
+  const EditChargeTable = async() => {
+    const id = location.state;
+    const result = await get(`master/getChargeTableById/${id}`, {
+      headers: authHeader()
+    });
+    setEditlist(result.data)
+    setId(result.data[0].id);
+    setConvenienceCharge(result.data[0].convenience_charge)
+    setChargeName(result.data[0].charge_name)
+    setOverWeightCharge(result.data[0].over_weight_charge)
+
+    const Reebooking = JSON.parse(result.data[0].rebooking)
+
+    const temp = Reebooking.map((item) => ({ ...item, type: item.pax_type }))
+    setRebooking([...temp])
+    const noshow = JSON.parse(result.data[0].no_show)
+    const temp1 = noshow.map((item) => ({
+      ...item, type:item.pax_type
+    }))
+    setNoshow([...temp1])
+    const cancel = JSON.parse(result.data[0].cancel)
+    const temp2 = cancel.map((item) => ({ ...item, type: item.pax_type }))
+    setCancel([...temp2])
+
+}
 
   useEffect(() => {
-   fetchPax()
+    fetchPax()
+    EditChargeTable()
   }, [])
   
   return (
@@ -83,8 +122,12 @@ const Form1 = () => {
   } = useChargeTableContext();
   
   const validateNextStep = () => {
-
-    setCount(count+1)
+    // if (chargeName === "") {
+    //   alert("Enter ChargeName")
+    // } else {
+      
+      setCount(count+1)
+    // }
     
   }
    return (
@@ -355,7 +398,7 @@ const Form3 = () => {
                     {noshow.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td>{item.code}</td>
+                          <td>{item.type}</td>
                           <td>
                             <select
                               class="form-select"
@@ -426,6 +469,8 @@ const Form3 = () => {
 };
 
 const Form4 = () => {
+  const { userInfo } = GetContext();
+    const navigate = useNavigate();
   const {
     chargeName,
     setChargeName,
@@ -462,8 +507,61 @@ const Form4 = () => {
      console.log("Temp:", temp);
      setCancel([...temp]);
   }
-  const handleEditSubmit = () => {
+  const handleEditSubmit = async (e) => {
     
+    e.preventDefault();
+
+    var params = {
+      uid: userInfo.uid,
+      id: Id,
+      charge_name: chargeName,
+      convenience_charge: convenienceCharge,
+      over_weight_charge: overWeightCharge,
+
+      rebooking: rebooking.map((item) => ({
+        pax_type: item.type,
+        tax_type: item.tax_type,
+        value: item.value,
+        hours: item.hours,
+      })),
+
+      cancel: cancel.map((item) => ({
+        pax_type: item.type,
+        tax_type: item.tax_type,
+        value: item.value,
+        hours: item.hours,
+      })),
+
+      no_show: noshow.map((item) => ({
+        pax_type: item.type,
+        tax_type: item.tax_type,
+        value: item.value,
+      })),
+
+    };
+
+    const result = await post("master/insertEditChargeTable", params, {
+      headers: authHeader()
+    });
+    if (result.status) {
+      Notification.swatSuccess(result.msg);
+      navigate(`/master/chargetable`);
+
+      setId("");
+      setChargeName("");
+      setConvenienceCharge("");
+      setOverWeightCharge("");
+      setPaxTypes("");
+      setTaxType("");
+      setValue("");
+      setHours("");
+      setRebooking([]);
+      setNoshow([]);
+      setCancel([]);
+    
+    } else {
+      alert("Please Enter Data");
+    }
   }
   return (
     <>
@@ -496,7 +594,7 @@ const Form4 = () => {
                     {cancel.map((item, index) => {
                       return (
                         <tr key={index}>
-                          <td>{item.code}</td>
+                          <td>{item.type}</td>
                           <td>
                             <select
                               class="form-select"
